@@ -93,7 +93,7 @@ namespace AccusoftCodeTest
                     else
                         listBox1.Items.Add("Deleting IX object & reloading file");
                     m_imagXpressObject = null;
-                    m_imagXpressObject = Accusoft.ImagXpressSdk.ImageX.FromFile(imagXpress1, @"C:\testimg.tif", p_pages);
+                    m_imagXpressObject = Accusoft.ImagXpressSdk.ImageX.FromFile(imagXpress1, file, p_pages);
                     listBox1.Items.Add("Image Loaded");
                     return m_imagXpressObject;
 
@@ -217,12 +217,13 @@ namespace AccusoftCodeTest
         {
             
 
+
             if (p_fileType != "")
             m_fileType = p_fileType;
             else
             m_fileType = comboBox1.Text;
             m_saveOptions = new Accusoft.ImagXpressSdk.SaveOptions();
-            //imageXView1 = new Accusoft.ImagXpressSdk.ImageXView();
+            
             switch (m_fileType)
            {
                 case "JPEG":
@@ -320,7 +321,7 @@ namespace AccusoftCodeTest
                        {
                            m_saveOptions.Tiff.MultiPage = true;
                            m_saveOptions.Format = Accusoft.ImagXpressSdk.ImageXFormat.Tiff;    
-                           imageXView1.Image.Save(@"C:\testMimg.tiff", m_saveOptions);
+                           imageXView1.Image.Save(@"D:\test\testMimg1.tiff", m_saveOptions);
                            listBox1.Items.Add("Multi-TIFF file format saved.");
                            return m_imagXpressObject;
                        }
@@ -351,10 +352,11 @@ namespace AccusoftCodeTest
             {
                 try
                 {
-                    m_numPages = Accusoft.ImagXpressSdk.ImageX.NumPages(imagXpress1, m_filePath);
-                    for (int i = 1; i <= p_fileName.Length; i++)
+                    m_numPages = Accusoft.ImagXpressSdk.ImageX.NumPages(imagXpress1, m_filePath); //changed loop
+                    for (int i = 1; i <= 3; i++)                                            
                     {
                         imageXView1.Image = Accusoft.ImagXpressSdk.ImageX.FromFile(imagXpress1, m_filePath, i);
+                       
                         SaveIX("MTIFF");
                     }
                 }
