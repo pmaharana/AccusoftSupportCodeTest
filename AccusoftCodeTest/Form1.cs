@@ -22,7 +22,11 @@ namespace AccusoftCodeTest
         private string m_currentDir;
         private string m_filePath;
         private string m_fileType;
+        //
+        private string myFile;
+            //
         private int m_numPages;
+        private string[] files;
         enum e_FileType {  };
     
         public Form1()
@@ -36,7 +40,17 @@ namespace AccusoftCodeTest
         //Load File button
         private void button1_Click(object sender, EventArgs e)
         {
-            ImageLoad(@"testimg.tif", 1);
+            m_currentDir = Directory.GetCurrentDirectory();
+
+            DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
+
+            string file = "";
+            if (result == DialogResult.OK) // Test result.
+            {
+                file = openFileDialog1.FileName;
+            }
+            myFile = file;
+            ImageLoad(file, 1);
             imageXView1.Image = m_imagXpressObject;
         }
 
@@ -54,8 +68,7 @@ namespace AccusoftCodeTest
         //Save File format
         private void button3_Click(object sender, EventArgs e)
         {
-            //saveFileDialog1.ShowDialog();   // Get file name.
-            //string name = saveFileDialog1.FileName;
+            
 
             SaveIX("");
         }
@@ -63,7 +76,9 @@ namespace AccusoftCodeTest
         //Save Multi-page Tiff file
         private void button4_Click(object sender, EventArgs e)
         {
-            SaveIXMultiPage(@"testimg.tif");
+
+            SaveIXMultiPage(myFile);
+            //SaveIXMultiPage(@"testimg.tif");
         }
 
         private Accusoft.ImagXpressSdk.ImageX ImageLoad(string p_fileName, int p_pages)
@@ -72,32 +87,28 @@ namespace AccusoftCodeTest
             {
                 try
                 {
-                    m_currentDir = Directory.GetCurrentDirectory();
-                    m_filePath = m_currentDir + @"\" + p_fileName;
-                    DialogResult result = openFileDialog1.ShowDialog(); // Show the dialog.
+                    
 
-                    string file = "";
-                    if (result == DialogResult.OK) // Test result.
+                    if (m_imagXpressObject == null)
                     {
-                        file = openFileDialog1.FileName;
-                    }
-
-                        if (m_imagXpressObject == null)
-                    {
-                       // m_imagXpressObject = Accusoft.ImagXpressSdk.ImageX.FromFile(imagXpress1, @"C:\testimg.tif", p_pages);
-                        m_imagXpressObject = Accusoft.ImagXpressSdk.ImageX.FromFile(imagXpress1, file, p_pages);
-
+                        m_imagXpressObject = Accusoft.ImagXpressSdk.ImageX.FromFile(imagXpress1, p_fileName, p_pages);
                         listBox1.Items.Add("IX Object Loaded");
                         return m_imagXpressObject;
                     }
+                    
                     else
+                    {
                         listBox1.Items.Add("Deleting IX object & reloading file");
-                    m_imagXpressObject = null;
-                    m_imagXpressObject = Accusoft.ImagXpressSdk.ImageX.FromFile(imagXpress1, file, p_pages);
-                    listBox1.Items.Add("Image Loaded");
-                    return m_imagXpressObject;
-
+                        m_imagXpressObject = null;
+                        m_imagXpressObject = Accusoft.ImagXpressSdk.ImageX.FromFile(imagXpress1, p_fileName, p_pages);
+                        listBox1.Items.Add("Image Loaded");
+                        return m_imagXpressObject;
+                    }
                 }
+                       
+
+                     
+
                 catch (Accusoft.ImagXpressSdk.ImagXpressException m_ex)
                 {
                     AccusoftError(m_ex, label1);
@@ -232,7 +243,7 @@ namespace AccusoftCodeTest
                        try
                        {         
                            m_saveOptions.Format = Accusoft.ImagXpressSdk.ImageXFormat.Jpeg;
-                           imageXView1.Image.Save(@"D:\test\testing.jpeg", m_saveOptions);
+                           imageXView1.Image.Save(@"D:\test\testinghah.jpeg", m_saveOptions);
                            listBox1.Items.Add("File saved to JPEG file format.");
                            return m_imagXpressObject;
                        }
@@ -254,7 +265,7 @@ namespace AccusoftCodeTest
                        try
                        {
                            m_saveOptions.Format = Accusoft.ImagXpressSdk.ImageXFormat.Bmp;
-                           imageXView1.Image.Save(@"C:\testimg.bmp", m_saveOptions);
+                           imageXView1.Image.Save(@"D:\test\testinghah.bmp", m_saveOptions);
                            listBox1.Items.Add("File saved to BMP file format.");
                            return m_imagXpressObject;
                        }
@@ -276,7 +287,7 @@ namespace AccusoftCodeTest
                        try
                        {
                            m_saveOptions.Format = Accusoft.ImagXpressSdk.ImageXFormat.Tiff;
-                           imageXView1.Image.Save(@"C:\testimg.tiff", m_saveOptions);
+                           imageXView1.Image.Save(@"D:\test\testinghah.tiff", m_saveOptions);
                            listBox1.Items.Add("File saved to TIFF file format.");
                            return m_imagXpressObject;
                        }
@@ -298,7 +309,7 @@ namespace AccusoftCodeTest
                        try
                        {
                            m_saveOptions.Format = Accusoft.ImagXpressSdk.ImageXFormat.Png;
-                           imageXView1.Image.Save(@"C:\testimg.png", m_saveOptions);
+                           imageXView1.Image.Save(@"D:\test\testinghah.png", m_saveOptions);
                            listBox1.Items.Add("File saved to PNG file format.");
                            return m_imagXpressObject;
                        }
@@ -321,7 +332,7 @@ namespace AccusoftCodeTest
                        {
                            m_saveOptions.Tiff.MultiPage = true;
                            m_saveOptions.Format = Accusoft.ImagXpressSdk.ImageXFormat.Tiff;    
-                           imageXView1.Image.Save(@"D:\test\testMimg1.tiff", m_saveOptions);
+                           imageXView1.Image.Save(@"D:\test\testMimg3.tiff", m_saveOptions);
                            listBox1.Items.Add("Multi-TIFF file format saved.");
                            return m_imagXpressObject;
                        }
@@ -346,18 +357,30 @@ namespace AccusoftCodeTest
 
         private Accusoft.ImagXpressSdk.ImageX SaveIXMultiPage(string p_fileName)
         {
-            m_filePath = m_currentDir + @"\" + p_fileName;
+            //m_filePath = m_currentDir + @"\" + p_fileName;
+            m_filePath = p_fileName;
             m_saveOptions = new Accusoft.ImagXpressSdk.SaveOptions();
             try
             {
                 try
                 {
+                    var imgList = new List<string>(); 
                     m_numPages = Accusoft.ImagXpressSdk.ImageX.NumPages(imagXpress1, m_filePath); //changed loop
-                    for (int i = 1; i <= 3; i++)                                            
+                    for (int i = 0; i < 3; i++)                                            
                     {
+                        if (i == 0)
+                        {
+
+                        ImageLoad(m_filePath, 1);
+                        imageXView1.Image = m_imagXpressObject;
+
+                        }
+
                         imageXView1.Image = Accusoft.ImagXpressSdk.ImageX.FromFile(imagXpress1, m_filePath, i);
-                       
                         SaveIX("MTIFF");
+
+
+                       
                     }
                 }
                 catch (Accusoft.ImagXpressSdk.ImagXpressException m_ex)
@@ -391,7 +414,33 @@ namespace AccusoftCodeTest
 
         private void button5_Click(object sender, EventArgs e)
         {
-            //TODO: Please add at least one function
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Title = "Please select multiple images";
+            ofd.Multiselect = true;
+            ofd.Filter = "JPG|*.jpg|JPEG|*.jpeg|GIF|*.gif|PNG|*.png";
+            DialogResult dr = ofd.ShowDialog();
+
+            if (dr == DialogResult.OK)
+            {
+                files = ofd.FileNames;
+                int x = 40;
+                int y = 40;
+                int maxHeight = -1;
+                foreach (var image in files)
+                {
+                    PictureBox pic = new PictureBox();
+                    pic.Image = Image.FromFile(image);
+                    pic.Location = new Point(x, y);
+                    x += pic.Width + 10;
+                    maxHeight = Math.Max(pic.Height, maxHeight);
+                    if (x > this.ClientSize.Width - 100)
+                    {
+                        x = 20;
+                        y += maxHeight + 10;
+                    }
+                    
+                }
+            }
         }
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
@@ -410,6 +459,11 @@ namespace AccusoftCodeTest
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void imageXView1_Load(object sender, EventArgs e)
         {
 
         }

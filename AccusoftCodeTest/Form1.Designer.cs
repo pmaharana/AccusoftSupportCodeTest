@@ -48,8 +48,9 @@
             this.imageXView1.Location = new System.Drawing.Point(16, 197);
             this.imageXView1.Margin = new System.Windows.Forms.Padding(4);
             this.imageXView1.Name = "imageXView1";
-            this.imageXView1.Size = new System.Drawing.Size(880, 362);
+            this.imageXView1.Size = new System.Drawing.Size(894, 364);
             this.imageXView1.TabIndex = 0;
+            this.imageXView1.Load += new System.EventHandler(this.imageXView1_Load);
             // 
             // listBox1
             // 
@@ -111,9 +112,9 @@
             this.button5.Location = new System.Drawing.Point(167, 55);
             this.button5.Margin = new System.Windows.Forms.Padding(4);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(143, 28);
+            this.button5.Size = new System.Drawing.Size(185, 28);
             this.button5.TabIndex = 6;
-            this.button5.Text = "button5";
+            this.button5.Text = "Load Multiple-Images";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
@@ -155,7 +156,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(976, 628);
+            this.ClientSize = new System.Drawing.Size(933, 576);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button5);
